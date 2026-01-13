@@ -96,9 +96,10 @@ An interactive Plotly viewer allows:
 
 ## Example Outputs
 
-*(Add generated plots and screenshots here)*
-![Raw vs Cleaned LIBS](image-3.png)
-![Combined Spectrum](image-4.png)
+<!-- *(Add generated plots and screenshots here)* -->
+![Raw vs Cleaned LIBS](images/image-3.png)
+![Combined Spectrum](images/image-4.png)
+![Screenshot of a viewer](images/image-2.png)
 ---
 
 ## Usage
@@ -117,8 +118,7 @@ result = analyze_day("data/raw/20230902")
 from lunar_spectra_workbench.viewer import show_spectrum
 
 show_spectrum(result, shot_id="ch3_lib_045_20230902T074049_00")
-![Screenshot of a viewer](image-2.png)
-# ![Screenshot of a viewer](image-1.png)
+
 ```
 
 ---
@@ -142,6 +142,8 @@ LIBS_spectra_workbench/
 │
 ├─ notebooks/
 │  └─ sandbox.ipynb
+|  └─sandbox2.ipynb
+|  └─spectral_viewer.ipynb
 │
 ├─ data/
 │  └─ raw/
