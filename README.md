@@ -43,9 +43,9 @@ Each LIBS firing may contain multiple CCD sub-frames corresponding to repeated r
 
 ```mermaid
 flowchart TD
-    A[Raw LIBS CSV Files] --> B[Parse Metadata & Pixel Columns]
+    A[Raw LIBS CSV Files] --> B[Parse Metadata and Pixel Columns]
     B --> C[Sub-frame Cleaning]
-    C --> D[Baseline Removal (AsLS)]
+    C --> D[Baseline Removal - AsLS]
     D --> E[Noise Smoothing]
     E --> F[Peak Detection]
     F --> G[Reference Line Matching]
@@ -57,6 +57,7 @@ flowchart TD
     K --> M[Calibrated Spectrum]
     L --> M
     M --> N[Interactive Spectral Viewer]
+
 ```
 
 ---
