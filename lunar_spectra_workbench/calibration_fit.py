@@ -53,3 +53,35 @@ def fit_linear_calibration(calib_df):
 
     return model, stats
 
+def fit_weighted_calibration(calib_df, shot_quality_df):
+
+    # Map shot_id → weight
+    weight_map = dict(
+        zip(shot_quality_df["shot_id"], shot_quality_df["mean_persistence"])
+    )
+
+    weights = calib_df["shot_id"].map(weight_map).fillna(0.1).values
+
+    X = calib_df["Pixel"].values.reshape(-1, 1)
+    y = calib_df["Ref_wavelength_nm"].values
+
+    model = LinearRegression()
+    model.fit(X, y, sample_weight=weights)
+
+    a = model.coef_[0]
+    b = model.intercept_
+
+    y_pred = model.predict(X)
+    residuals = y - y_pred
+
+    stats = {
+        "a": a,
+        "b": b,
+        "rmse_nm": np.sqrt(np.average(residuals**2, weights=weights)),
+        "max_error_nm": np.max(np.abs(residuals)),
+        "num_points": len(calib_df),
+        "weighted": True
+    }
+
+    return model, stats
+

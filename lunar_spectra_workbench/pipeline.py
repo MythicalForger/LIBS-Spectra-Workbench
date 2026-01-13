@@ -1,16 +1,10 @@
 import pandas as pd
-
 from .load import find_l0_csvs, load_l0_csv, get_shot_id
 from .clean import clean_subframe
 from .peaks import detect_peaks
 from .match import match_elements
-from .calibration_fit import select_calibration_points, fit_linear_calibration
-
-from .consistency import (
-    peak_persistence,
-    subframe_quality,
-    shot_quality
-)
+from .calibration_fit import select_calibration_points, fit_linear_calibration, fit_weighted_calibration
+from .consistency import peak_persistence, subframe_quality, shot_quality
 
 class AnalysisResult:
     def __init__(self, matches, calibration, persistence, subframes, shots):
@@ -52,13 +46,13 @@ def analyze_day(day_dir):
 
     all_matches_df = pd.concat(all_matches, ignore_index=True)
 
-    # --- calibration per day ---
-    calib_pts = select_calibration_points(all_matches_df)
-    _, calib_stats = fit_linear_calibration(calib_pts)
-
     persistence = peak_persistence(all_matches_df)
     subframes = subframe_quality(all_matches_df, persistence)
     shots = shot_quality(subframes)
+
+    # --- calibration per day ---
+    calib_pts = select_calibration_points(all_matches_df)
+    _, calib_stats = fit_weighted_calibration(calib_pts, shots)
 
     return AnalysisResult(
         all_matches_df,
