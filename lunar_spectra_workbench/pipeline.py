@@ -6,11 +6,19 @@ from .peaks import detect_peaks
 from .match import match_elements
 from .calibration_fit import select_calibration_points, fit_linear_calibration
 
+from .consistency import (
+    peak_persistence,
+    subframe_quality,
+    shot_quality
+)
 
 class AnalysisResult:
-    def __init__(self, matches, calibration):
+    def __init__(self, matches, calibration, persistence, subframes, shots):
         self.matches = matches
         self.calibration = calibration
+        self.peak_persistence = persistence
+        self.subframe_quality = subframes
+        self.shot_quality = shots
 
 
 def analyze_day(day_dir):
@@ -48,4 +56,17 @@ def analyze_day(day_dir):
     calib_pts = select_calibration_points(all_matches_df)
     _, calib_stats = fit_linear_calibration(calib_pts)
 
-    return AnalysisResult(all_matches_df, calib_stats)
+    persistence = peak_persistence(all_matches_df)
+    subframes = subframe_quality(all_matches_df, persistence)
+    shots = shot_quality(subframes)
+
+    return AnalysisResult(
+        all_matches_df,
+        calib_stats,
+        persistence,
+        subframes,
+        shots
+    )
+
+
+
