@@ -7,10 +7,6 @@ def peak_persistence(
     pixel_tol=3,
     min_subframes=2
 ):
-    """
-    Identify persistent peaks across sub-frames of a shot.
-    """
-
     records = []
 
     for (shot_id, element), g in matches_df.groupby(["shot_id", "Element"]):
@@ -39,10 +35,6 @@ def peak_persistence(
     return pd.DataFrame(records)
 
 def subframe_quality(matches_df, persistence_df):
-    """
-    Compute quality metrics for each sub-frame.
-    """
-
     persistent_keys = set(
         zip(persistence_df["shot_id"], persistence_df["Element"])
     )
@@ -68,10 +60,6 @@ def subframe_quality(matches_df, persistence_df):
     return pd.DataFrame(rows)
 
 def shot_quality(subframe_df):
-    """
-    Aggregate sub-frame quality into a shot-level score.
-    """
-
     rows = []
 
     for shot_id, g in subframe_df.groupby("shot_id"):
